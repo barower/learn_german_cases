@@ -76,8 +76,8 @@ generate_mp3 () {
 
 	./speak.pl de <(echo "$1") $tempfolder/temp1.mp3 >/dev/null
 	./speak.pl de <(echo "$2") $tempfolder/temp2.mp3 >/dev/null
-	sox $tempfolder/temp2.mp3 temp3.mp3 pad $pause 0
-	sox $tempfolder/temp1.mp3 temp3.mp3 $3
+	sox $tempfolder/temp2.mp3 $tempfolder/temp3.mp3 pad $pause 0
+	sox $tempfolder/temp1.mp3 $tempfolder/temp3.mp3 $3
 }
 
 [ $# -ne 1 ] && { echo "Usage: $0 wordlist"; exit 1; }
