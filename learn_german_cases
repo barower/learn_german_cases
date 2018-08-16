@@ -1,8 +1,11 @@
 #!/bin/bash
 
+# Pause between question and answer
 pause=2
 
-cases=( "Akkusativ" "Dativ" "Genitiv" )
+#cases=( "Akkusativ" "Dativ" "Genitiv" )
+cases=( "Akkusativ" "Dativ" )
+
 tempfolder=temp
 resultfolder=${1%.txt}
 
@@ -77,10 +80,11 @@ generate_mp3 () {
 	sox $tempfolder/temp1.mp3 temp3.mp3 $3
 }
 
+[ $# -ne 1 ] && { echo "Usage: $0 wordlist"; exit 1; }
 
 if ! [ -x "$(command -v sox)" ]; then
 	echo >&2 "Error: sox is not installed. Try running:"
-	echo >&2 "sudo apt-get install sox"
+	echo >&2 "sudo apt-get install libsox-fmt-mp3 sox"
 	exit 1
 fi
 
