@@ -21,7 +21,7 @@ fileno=0
 for line in $(cat < "$1"); do
 	outputfilename=${1%.txt}$fileno.mp3
 	echo $outputfilename
-	./speak.pl de <(echo "$line") $resultfolder/$outputfilename
+	./speak.pl de <(echo "$line") $resultfolder/$outputfilename >/dev/null
 
 	fileno=$((fileno+1))
 done
