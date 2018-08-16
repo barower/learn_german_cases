@@ -6,7 +6,7 @@ pause=2
 #cases=( "Akkusativ" "Dativ" "Genitiv" )
 cases=( "Akkusativ" "Dativ" )
 
-tempfolder=temp
+tempfolder=$(mktemp -d)
 resultfolder=${1%.txt}
 
 print_cases () {
@@ -74,10 +74,16 @@ generate_mp3 () {
 	#sox text1.mp3 temp.mp3 out.mp3
 	#rm text1.mp3 text2.mp3 temp.mp3
 
-	./speak.pl de <(echo "$1") $tempfolder/temp1.mp3 >/dev/null
-	./speak.pl de <(echo "$2") $tempfolder/temp2.mp3 >/dev/null
-	sox $tempfolder/temp2.mp3 $tempfolder/temp3.mp3 pad $pause 0
-	sox $tempfolder/temp1.mp3 $tempfolder/temp3.mp3 $3
+	temp_file1=$(mktemp --suffix=.mp3 --tmpdir=$tempfolder)
+	temp_file2=$(mktemp --suffix=.mp3 --tmpdir=$tempfolder)
+	temp_file3=$(mktemp --suffix=.mp3 --tmpdir=$tempfolder)
+
+	./speak.pl de <(echo "$1") $temp_file1 >/dev/null
+	./speak.pl de <(echo "$2") $temp_file2 >/dev/null
+	sox $temp_file2 $temp_file3 pad $pause 0
+	sox $temp_file1 $temp_file3 $3
+
+	rm $temp_file1 $temp_file2 $temp_file3
 }
 
 [ $# -ne 1 ] && { echo "Usage: $0 wordlist"; exit 1; }
