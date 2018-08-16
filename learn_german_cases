@@ -2,16 +2,85 @@
 
 pause=2
 
-#./speak.pl de text1.txt text1.mp3
-#./speak.pl de text2.txt text2.mp3
-#sox text2.mp3 temp.mp3 pad $pause 0
-#sox text1.mp3 temp.mp3 out.mp3
-#rm text1.mp3 text2.mp3 temp.mp3
+cases=( "Akkusativ" "Dativ" "Genitiv" )
+tempfolder=temp
+resultfolder=${1%.txt}
+
+print_cases () {
+	gender=`echo ${1/%\ */}`
+	case=$2
+	case "$gender" in
+		der)
+			case "$case" in
+				Akkusativ)
+					echo den
+					;;
+				Dativ)
+					echo dem
+					;;
+				Genitiv)
+					echo des
+					;;
+				*)
+					echo Error!
+					exit 1
+			esac
+			;;
+		die)
+			case "$case" in
+				Akkusativ)
+					echo die
+					;;
+				Dativ)
+					echo der
+					;;
+				Genitiv)
+					echo der
+					;;
+				*)
+					echo Error!
+					exit 1
+			esac
+			;;
+		das)
+			case "$case" in
+				Akkusativ)
+					echo das
+					;;
+				Dativ)
+					echo dem
+					;;
+				Genitiv)
+					echo des
+					;;
+				*)
+					echo Error!
+					exit 1
+			esac
+			;;
+		*)
+			echo "Error!"
+			exit 1
+	esac
+}
+
+generate_mp3 () {
+	#./speak.pl de text1.txt text1.mp3
+	#./speak.pl de text2.txt text2.mp3
+	#sox text2.mp3 temp.mp3 pad $pause 0
+	#sox text1.mp3 temp.mp3 out.mp3
+	#rm text1.mp3 text2.mp3 temp.mp3
+
+	./speak.pl de <(echo "$1") $tempfolder/temp1.mp3 >/dev/null
+	./speak.pl de <(echo "$2") $tempfolder/temp2.mp3 >/dev/null
+	sox $tempfolder/temp2.mp3 temp3.mp3 pad $pause 0
+	sox $tempfolder/temp1.mp3 temp3.mp3 $3
+}
 
 # Create folder with results
 
-resultfolder=${1%.txt}
 mkdir -p $resultfolder
+mkdir -p $tempfolder
 
 # Iterate over wordlist
 
@@ -19,9 +88,17 @@ IFS=$'\n'	# make newlines the only separator
 set -f		# disable globbing
 fileno=0
 for line in $(cat < "$1"); do
-	outputfilename=${1%.txt}$fileno.mp3
-	echo $outputfilename
-	./speak.pl de <(echo "$line") $resultfolder/$outputfilename >/dev/null
+	for case in "${cases[@]}"; do
+		outputfilename=${1%.txt}$fileno.mp3
+		echo Generating $resultfolder/$outputfilename...
 
-	fileno=$((fileno+1))
+		question="$line, $case"
+		answer=`print_cases $line $case`
+
+		generate_mp3 $question $answer $resultfolder/$outputfilename
+
+		fileno=$((fileno+1))
+	done
 done
+
+rm -rf $tempfolder
