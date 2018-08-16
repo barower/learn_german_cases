@@ -7,7 +7,7 @@ pause=2
 cases=( "Akkusativ" "Dativ" )
 
 tempfolder=$(mktemp -d)
-resultfolder=${1%.txt}
+resultfolder=${1%.txt}-playlist
 
 print_cases () {
 
