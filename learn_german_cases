@@ -77,6 +77,13 @@ generate_mp3 () {
 	sox $tempfolder/temp1.mp3 temp3.mp3 $3
 }
 
+
+if ! [ -x "$(command -v sox)" ]; then
+	echo >&2 "Error: sox is not installed. Try running:"
+	echo >&2 "sudo apt-get install sox"
+	exit 1
+fi
+
 # Create folder with results
 
 mkdir -p $resultfolder
