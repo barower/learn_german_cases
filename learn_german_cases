@@ -2,8 +2,26 @@
 
 pause=2
 
-./speak.pl de text1.txt text1.mp3
-./speak.pl de text2.txt text2.mp3
-sox text2.mp3 temp.mp3 pad $pause 0
-sox text1.mp3 temp.mp3 out.mp3
-rm text1.mp3 text2.mp3 temp.mp3
+#./speak.pl de text1.txt text1.mp3
+#./speak.pl de text2.txt text2.mp3
+#sox text2.mp3 temp.mp3 pad $pause 0
+#sox text1.mp3 temp.mp3 out.mp3
+#rm text1.mp3 text2.mp3 temp.mp3
+
+# Create folder with results
+
+resultfolder=${1%.txt}
+mkdir -p $resultfolder
+
+# Iterate over wordlist
+
+IFS=$'\n'	# make newlines the only separator
+set -f		# disable globbing
+fileno=0
+for line in $(cat < "$1"); do
+	outputfilename=${1%.txt}$fileno.mp3
+	echo $outputfilename
+	./speak.pl de <(echo "$line") $resultfolder/$outputfilename
+
+	fileno=$((fileno+1))
+done
