@@ -1,4 +1,4 @@
-# learn_german_cases
+# Learn German cases
 
 This is a small program which I made for myself in order to finally grasp German cases.
 
@@ -20,6 +20,8 @@ Instead of learning it by heart, you can:
 5. Use this playlist while doing your chores/commuting to work!
 
 For text-to-speech I used [Michal Fapso's script which fetches audio from Google's engine](http://michalfapso.blogspot.com/2012/01/using-google-text-to-speech.html).
+
+You can modify pause and rest parameters in learn_german_cases if the riddle pacing doesn't suit you.
 
 ## Caveats
 
