@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Pause between question and answer
-pause=2
+pause=4
+# Rest between riddles
+rest=2
 
 #cases=( "Akkusativ" "Dativ" "Genitiv" )
 cases=( "Akkusativ" "Dativ" )
@@ -79,7 +81,7 @@ generate_mp3 () {
 
 	./speak.pl de <(echo "$1") $temp_file1 >/dev/null
 	./speak.pl de <(echo "$2") $temp_file2 >/dev/null
-	sox $temp_file2 $temp_file3 pad $pause 0
+	sox $temp_file2 $temp_file3 pad $pause $rest
 	sox $temp_file1 $temp_file3 $3
 
 	rm $temp_file1 $temp_file2 $temp_file3
