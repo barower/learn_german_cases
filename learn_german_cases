@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Pause between question and answer
+# Pause between question and answer (in seconds)
 pause=4
-# Rest between riddles
+# Rest between riddles (in seconds)
 rest=2
 
 cases=( "Akkusativ" "Dativ" )
